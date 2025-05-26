@@ -37,6 +37,9 @@ dependencies:
   google_fonts: ^6.2.1
   provider: ^6.1.5
   number_inc_dec: ^0.8.0
+  flutter_slidable: ^4.0.0
+  firebase_core: ^3.13.1
+  cloud_firestore: ^5.6.8
 
 dev_dependencies:
   flutter_test:

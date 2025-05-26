@@ -1,10 +1,17 @@
+
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:my_project_first/provider/logic_provider.dart';
 import 'package:provider/provider.dart';
 
-class CartSummaryBar extends StatelessWidget {
+class CartSummaryBar extends StatefulWidget {
   const CartSummaryBar({super.key});
 
+  @override
+  State<CartSummaryBar> createState() => _CartSummaryBarState();
+}
+
+class _CartSummaryBarState extends State<CartSummaryBar> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -21,18 +28,34 @@ class CartSummaryBar extends StatelessWidget {
                           itemCount: cart.userSelected.length,
                           itemBuilder: (context, index) {
                             final item = cart.userSelected[index];
-                            return ListTile(
-                              leading: Image.asset(
-                                item.itemImage,
-                                width: 40,
-                                height: 40,
+                            return Slidable(
+                              endActionPane: ActionPane(
+                                motion: StretchMotion(),
+                                children: [
+                                  SlidableAction(
+                                    onPressed: (_) {
+                                      setState(() {
+                                        cart.userSelected.removeAt(index);
+                                      });
+                                    },
+                                    backgroundColor: Colors.redAccent,
+                                    icon: Icons.delete,
+                                  ),
+                                ],
                               ),
-                              title: Text(item.itemName),
-                              subtitle: Text(
-                                "₹${item.itemPrice} x ${item.quantity}",
-                              ),
-                              trailing: Text(
-                                "₹${item.itemPrice * item.quantity}",
+                              child: ListTile(
+                                leading: Image.asset(
+                                  item.itemImage,
+                                  width: 40,
+                                  height: 40,
+                                ),
+                                title: Text(item.itemName),
+                                subtitle: Text(
+                                  "₹${item.itemPrice} x ${item.quantity}",
+                                ),
+                                trailing: Text(
+                                  "₹${item.itemPrice * item.quantity}",
+                                ),
                               ),
                             );
                           },

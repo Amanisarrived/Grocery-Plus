@@ -13,20 +13,28 @@ class LocationWidget extends StatelessWidget {
           child: Icon(Icons.location_on_sharp, color: Colors.white),
         ),
         SizedBox(width: 10),
-
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text("Your Location", style: TextStyle(fontSize: 8)),
-            Text(
-              "Wz-555 Naraina Village New Delhi 110028",
-              style: TextStyle(fontSize: 12),
-            ),
-          ],
+        Expanded(
+          child: Row(
+            children: [
+              Flexible(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("Your Location", style: TextStyle(fontSize: 8)),
+                    Text(
+                      "Wz-555 Naraina Village New Delhi 110028",
+                      style: TextStyle(fontSize: 12),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(width: 10),
+              Icon(Icons.arrow_right_rounded, size: 35),
+            ],
+          ),
         ),
-        SizedBox(width: 30),
-        Icon(Icons.arrow_right_rounded, size: 35),
-        
       ],
     );
   }

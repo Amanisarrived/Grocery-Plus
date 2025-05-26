@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_project_first/models/item_model.dart';
 import 'package:my_project_first/provider/logic_provider.dart';
+import 'package:my_project_first/provider/product_provider.dart';
 import 'package:provider/provider.dart';
 
 class ItemsTile extends StatefulWidget {
@@ -38,10 +39,15 @@ class _ItemsTileState extends State<ItemsTile> {
               ),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(16),
-                child: Image.asset(
-                  widget.allItems.itemImage,
-                  fit: BoxFit.cover,
-                ),
+                child: widget.allItems.itemImage.startsWith('http')
+                    ? Image.network(
+                        widget.allItems.itemImage,
+                        fit: BoxFit.cover,
+                      )
+                    : Image.asset(
+                        widget.allItems.itemImage,
+                        fit: BoxFit.cover,
+                      ),
               ),
             ),
             const SizedBox(width: 16),
@@ -82,20 +88,17 @@ class _ItemsTileState extends State<ItemsTile> {
                         ),
                       ),
                       const SizedBox(width: 8),
-                      Text(
-                        quantity.toString(),
-                        style: TextStyle(fontSize: 16),
-                      ),
+                      Text(quantity.toString(), style: TextStyle(fontSize: 16)),
                       const SizedBox(width: 8),
                       IconButton(
                         onPressed: () {
                           setState(() {
-                            if (quantity <= 0) {
-                              return;
-                            } else {
+                            if (quantity > 0) {
                               quantity--;
+                              Provider.of<LogicProvider>(context, listen: false)
+                                  .removeFromCart(widget.allItems);
                             }
-                          });
+                      });
                         },
                         icon: Icon(
                           Icons.remove_circle_outline,
@@ -115,7 +118,25 @@ class _ItemsTileState extends State<ItemsTile> {
                 backgroundColor: Theme.of(context).primaryColor,
                 child: IconButton(
                   onPressed: () {
-                   Provider.of<LogicProvider>(context,listen: false).addToCart(widget.allItems, quantity);
+                    quantity == 0
+                        ? showDialog(
+                            context: context,
+                            builder: (_) => AlertDialog(
+                              content: Text("Select Quantity"),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: Text("Okay"),
+                                ),
+                              ],
+                            ),
+                          )
+                        : Provider.of<LogicProvider>(
+                            context,
+                            listen: false,
+                          ).addToCart(widget.allItems, quantity);
                   },
                   icon: Icon(Icons.add, color: Colors.white),
                 ),
